@@ -14,9 +14,9 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        Int   @id @default(autoincrement())
+  username  String 
   email     String   @unique
-  name      String? 
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -24,13 +24,13 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
   price       Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userId      String
+  userId      Int
   user        User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
