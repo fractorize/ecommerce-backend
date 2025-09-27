@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const { username, email, password } = registerDto;
+    const { username, email, password, role } = registerDto;
 
     // Check if user already exists
     const existingUser = await this.prisma.user.findUnique({
@@ -36,7 +36,12 @@ export class AuthService {
 
       // Create new user
       const newlyCreatedUser = await this.prisma.user.create({
-        data: { username, email, password: hashedPassword },
+        data: {
+          username,
+          email,
+          password: hashedPassword,
+          role: role ?? 'user',
+        },
       });
 
       // Remove password from returned object
@@ -66,7 +71,10 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const token = await this.jwtService.signAsync({ userId: user.id });
+    const token = await this.jwtService.signAsync({
+      userId: user.id,
+      role: user.role,
+    });
 
     // Remove password from returned object
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -12,4 +12,6 @@ export class RegisterDto {
     message: 'Password is too short. Minimum length is 6 characters.',
   })
   password: string;
+
+  role?: string;
 }
